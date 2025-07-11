@@ -4,32 +4,23 @@ This Python script plays preprocessed animations that's converted from GIFs, use
 - **ST7789** 240x240 IPS (via SPI) (GIF Player)
 - **SSD1306** 128x64 OLED (via I2C) (Status display)
 
-It supports loading images, fallback text rendering, clean shutdown, and button-triggered GIF switching using GPIO input.
+It supports loading animations, clean shutdown, and button-triggered GIF switching using GPIO input.
 
-## Functions
+## What does it do?
 
-- Dual display for max eyecandy
-- Preprocessed bin file format for fast(ish) GIF playback
+- Dual display for max eyecandy (Primary IPS for GIF, secondary OLED for status)
+- Playback preprocessed bin file format for fast(ish) GIF playback
+- Caching to reduce I/O usage during playback
 - GPIO button input to cycle GIFs and exit the program
-- Caching for reduced I/O during playback
 
 ## Hardware Needed
 
-- Raspberry Pi 3+ (Developed and Tested on a Raspberry Pi Zero 2W)
+- Raspberry Pi 3 and above (Developed and Tested on a Raspberry Pi Zero 2W)
 - ST7789 240x240 SPI IPS display
 - SSD1306 128x64 I2C OLED display
 - 2 GPIO-connected buttons:
   - GPIO 24: Next GIF
   - GPIO 23: Quit program
-
-## Dependencies
-
-Install via `pip` within the venv (assuming venv is on a parent folder):
-
-```bash
-../luma-env/bin/python -m pip install pillow gpiozero rpi-lgpio luma.oled luma.lcd
-```
-
 
 ## Folder Structure
 
@@ -41,6 +32,14 @@ TakupyGIF/
 ├── loading_oled.png     -/Optional splash image for SSD1306
 ├── lcdgif.py            -/Main player script
 └── preprocess_gif.py    -/GIF to Custom .bin pre-processor
+```
+
+## Dependencies
+
+Install via `pip` within a venv (assuming venv is on a parent folder):
+
+```bash
+../luma-env/bin/python -m pip install pillow gpiozero rpi-lgpio luma.oled luma.lcd
 ```
 
 ## Usage
@@ -66,7 +65,7 @@ TakupyGIF/
    - **GPIO 23**: Exit and shutdown cleanly
 
 
-## Custom GIF Binary File Format
+## Info about the GIF binary file format
 
 Each `.gif` is:
 - Resized to **240x240**
@@ -75,24 +74,20 @@ Each `.gif` is:
   - `frame_count` (2 bytes)
   - `width` (2 bytes)
   - `height` (2 bytes)
-- Followed by:
+- In which containing:
   - 4-byte float durations for each frame
   - Raw RGB565 frame data (per frame)
 
-Each `.bin` animation is structured as:
+Each `.bin` "animation" is structured as so:
 - 6-byte header: `<frame_count:2><width:2><height:2>`
 - 4-byte float durations for each frame
 - Raw RGB565 frame data per frame
 
 Frames are decoded using Pillow from raw bytes and played with precise frame delay timing.
 
-
-
 ## Splash and Fallback
 
 - If `loading.png` or `loading_oled.png` is missing, fallback text will be shown instead.
-
-
 
 ## Clean Exit
 
