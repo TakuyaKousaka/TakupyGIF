@@ -4,7 +4,7 @@ This Python script plays preprocessed animations that's converted from GIFs, use
 - **ST7789** 240x240 IPS (via SPI) (GIF Player)
 - **SSD1306** 128x64 OLED (via I2C) (Status display)
 
-It supports loading images, fallback text rendering, graceful shutdown, and button-triggered GIF switching using GPIO input.
+It supports loading images, fallback text rendering, clean shutdown, and button-triggered GIF switching using GPIO input.
 
 ## Functions
 
@@ -34,7 +34,7 @@ Install via `pip` within the venv (assuming venv is on a parent folder):
 ## Folder Structure
 
 ```
-project/
+TakupyGIF/
 ├── gif/                 -/Folder containing 240x240 resolution gifs (Exact resolution match isn't required, make sure it's 1:1 aspect ratio)
 ├── bin/                 -/Folder containing numbered preprocessed .bin animation files (e.g. 0.bin, 1.bin...)
 ├── loading.png          -/Optional splash image for ST7789
